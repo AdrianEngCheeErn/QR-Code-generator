@@ -1,4 +1,4 @@
-/* 
+    /*
  * QR Code generator demo (C)
  * 
  * Run this command-line program with no arguments. The program
