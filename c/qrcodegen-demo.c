@@ -340,6 +340,11 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
         }
     }
 
+	if (stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize) == 0) {
+			fprintf(stderr, "Failed to write PNG image: %s\n", filename);
+			exit(EXIT_FAILURE);
+		}
+		
     // Save the image to a file using stb_image_write
     stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize);
 
