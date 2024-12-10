@@ -350,6 +350,8 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
 
     // Free the image buffer
     free(image);
+
+	printf("test");
 }
 
 // Example of a modified printQr function
