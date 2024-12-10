@@ -46,6 +46,7 @@ static void printQr(const uint8_t qrcode[]);
 
 // The main application program.
 int main(void) {
+	printf("test\n");
 	doBasicDemo();
 	return EXIT_SUCCESS;
 }
@@ -333,26 +334,25 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
     // Fill the image buffer with the QR code
     for (int y = 0; y < size + 2 * border; y++) {
         for (int x = 0; x < size + 2 * border; x++) {
-            int isBlack = (x >= border && x < size + border && y >= border && y < size + border) &&
-                          qrcodegen_getModule(qrcode, x - border, y - border);
-            // Set the pixel color (black or white)
-            memset(&image[(y * imageSize + x) * 1], isBlack ? 0 : 255, 1);
+            // Compute if the pixel should be black or white
+            bool isBlack = (x >= border && x < size + border && y >= border && y < size + border)
+                           && qrcodegen_getModule(qrcode, x - border, y - border);
+            // Set the pixel value (black = 0, white = 255)
+            image[y * imageSize + x] = isBlack ? 0 : 255;
         }
     }
 
-	if (stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize) == 0) {
-			fprintf(stderr, "Failed to write PNG image: %s\n", filename);
-			exit(EXIT_FAILURE);
-		}
-		
-    // Save the image to a file using stb_image_write
-    stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize);
+    // Write the image buffer to a PNG file
+    int result = stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize);
+    if (result == 0) {
+        fprintf(stderr, "Failed to write PNG file: %s\n", filename);
+        free(image);
+        exit(EXIT_FAILURE);
+    }
 
-    // Free the image buffer
     free(image);
-
-	printf("test");
 }
+
 
 // Example of a modified printQr function
 // void printQr(const uint8_t qrcode[]) {
@@ -386,6 +386,5 @@ static void doBasicDemo(void) {
 		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
 	if (ok)
 		printQrToImage(qrcode, "qrcode.png");
-		printf("Test1");
-	printf("Test2");
+		printQr(qrcode);
 }
