@@ -386,4 +386,6 @@ static void doBasicDemo(void) {
 		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
 	if (ok)
 		printQrToImage(qrcode, "qrcode.png");
+		printf("Test1");
+	printf("Test2");
 }
