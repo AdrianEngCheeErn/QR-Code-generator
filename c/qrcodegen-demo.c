@@ -319,7 +319,6 @@ static void printQr(const uint8_t qrcode[]) {
 
 // Save the QR Code as an image (PNG)
 void printQrToImage(const uint8_t qrcode[], const char *filename) {
-	printf("test\n");
     int size = qrcodegen_getSize(qrcode);  // Get the size of the QR code
     int border = 4;  // Border size in pixels
     int imageSize = (size + 2 * border) * 10;  // Size of the image (QR code + border) * scale factor
@@ -347,8 +346,10 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
     if (result == 0) {
         fprintf(stderr, "Failed to write PNG file: %s\n", filename);
         free(image);
+		printf("test\n");
         exit(EXIT_FAILURE);
     }
+	printf("test2\n");
 
     free(image);
 }
