@@ -42,28 +42,11 @@ int main(void) {
 }
 
 
-
-/*---- Utilities ----*/
-
-// Prints the given QR Code to the console.
-static void printQr(const uint8_t qrcode[]) {
-	int size = qrcodegen_getSize(qrcode);
-	int border = 4;
-	for (int y = -border; y < size + border; y++) {
-		for (int x = -border; x < size + border; x++) {
-			fputs((qrcodegen_getModule(qrcode, x, y) ? "##" : "  "), stdout);
-		}
-		fputs("\n", stdout);
-	}
-	fputs("\n", stdout);
-}
-
-
 // Save the QR Code as an image (PNG)
 void printQrToImage(const uint8_t qrcode[], const char *filename) {
     int size = qrcodegen_getSize(qrcode);  // Get the size of the QR code
-    int border = 4;  // Border size in pixels
-    int imageSize = (size + 2 * border) * 10;  // Size of the image (QR code + border) * scale factor
+    int border = 1;  // Border size in pixels
+    int imageSize = (size + 2 * border);  // Size of the image (QR code + border) * scale factor
 
     // Create a buffer to hold the pixel data (1 byte per pixel)
     unsigned char *image = calloc(imageSize * imageSize, sizeof(unsigned char));
@@ -95,7 +78,7 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
 }
 
 // Creates a single QR Code, then prints it to the console.
-static void doBasicDemo(void) {
+void doBasicDemo(void) {
 	const char *text = "www.google.com";                // User-supplied text
 	enum qrcodegen_Ecc errCorLvl = qrcodegen_Ecc_LOW;  // Error correction level
 	
@@ -106,5 +89,4 @@ static void doBasicDemo(void) {
 		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
 	if (ok)
 	printQrToImage(qrcode, "C:/Users/Adrian/Documents/GitHub/QR-Code-generator/c/qrcode.png");
-	printQr(qrcode);
 }
