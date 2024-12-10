@@ -29,7 +29,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 #include "qrcodegen.h"
+#include "qrcodegen.c"
 
 
 // Function prototypes
@@ -43,30 +47,8 @@ static void printQr(const uint8_t qrcode[]);
 // The main application program.
 int main(void) {
 	doBasicDemo();
-	doVarietyDemo();
-	doSegmentDemo();
-	doMaskDemo();
 	return EXIT_SUCCESS;
 }
-
-
-
-/*---- Demo suite ----*/
-
-// Creates a single QR Code, then prints it to the console.
-static void doBasicDemo(void) {
-	const char *text = "Hello, world!";                // User-supplied text
-	enum qrcodegen_Ecc errCorLvl = qrcodegen_Ecc_LOW;  // Error correction level
-	
-	// Make and print the QR Code symbol
-	uint8_t qrcode[qrcodegen_BUFFER_LEN_MAX];
-	uint8_t tempBuffer[qrcodegen_BUFFER_LEN_MAX];
-	bool ok = qrcodegen_encodeText(text, tempBuffer, qrcode, errCorLvl,
-		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
-	if (ok)
-		printQr(qrcode);
-}
-
 
 // Creates a variety of QR Codes that exercise different features of the library, and prints each one to the console.
 static void doVarietyDemo(void) {
@@ -332,4 +314,69 @@ static void printQr(const uint8_t qrcode[]) {
 		fputs("\n", stdout);
 	}
 	fputs("\n", stdout);
+}
+
+
+// Save the QR Code as an image (PNG)
+void printQrToImage(const uint8_t qrcode[], const char *filename) {
+    int size = qrcodegen_getSize(qrcode);  // Get the size of the QR code
+    int border = 4;  // Border size in pixels
+    int imageSize = (size + 2 * border) * 10;  // Size of the image (QR code + border) * scale factor
+
+    // Create a buffer to hold the pixel data (1 byte per pixel)
+    unsigned char *image = calloc(imageSize * imageSize, sizeof(unsigned char));
+    if (image == NULL) {
+        perror("calloc");
+        exit(EXIT_FAILURE);
+    }
+
+    // Fill the image buffer with the QR code
+    for (int y = 0; y < size + 2 * border; y++) {
+        for (int x = 0; x < size + 2 * border; x++) {
+            int isBlack = (x >= border && x < size + border && y >= border && y < size + border) &&
+                          qrcodegen_getModule(qrcode, x - border, y - border);
+            // Set the pixel color (black or white)
+            memset(&image[(y * imageSize + x) * 1], isBlack ? 0 : 255, 1);
+        }
+    }
+
+    // Save the image to a file using stb_image_write
+    stbi_write_png(filename, imageSize, imageSize, 1, image, imageSize);
+
+    // Free the image buffer
+    free(image);
+}
+
+// Example of a modified printQr function
+// void printQr(const uint8_t qrcode[]) {
+//     int size = qrcodegen_getSize(qrcode); // Get the size of the QR code
+    
+//     for (int y = 0; y < size; y++) {
+//         for (int x = 0; x < size; x++) {
+//             bool isBlack = qrcodegen_getModule(qrcode, x, y);
+        
+//             if (isBlack) {
+//                 printf("\033[31m#\033[0m"); 
+//             } else {
+//                 printf(" "); 
+//             }
+//         }
+//         printf("\n");
+//     }
+// }
+
+/*---- Demo suite ----*/
+
+// Creates a single QR Code, then prints it to the console.
+static void doBasicDemo(void) {
+	const char *text = "www.google.com";                // User-supplied text
+	enum qrcodegen_Ecc errCorLvl = qrcodegen_Ecc_LOW;  // Error correction level
+	
+	// Make and print the QR Code symbol
+	uint8_t qrcode[qrcodegen_BUFFER_LEN_MAX];
+	uint8_t tempBuffer[qrcodegen_BUFFER_LEN_MAX];
+	bool ok = qrcodegen_encodeText(text, tempBuffer, qrcode, errCorLvl,
+		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
+	if (ok)
+		printQrToImage(qrcode, "qrcode.png");
 }
