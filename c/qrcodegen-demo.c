@@ -46,7 +46,6 @@ static void printQr(const uint8_t qrcode[]);
 
 // The main application program.
 int main(void) {
-	printf("test\n");
 	doBasicDemo();
 	return EXIT_SUCCESS;
 }
@@ -320,6 +319,7 @@ static void printQr(const uint8_t qrcode[]) {
 
 // Save the QR Code as an image (PNG)
 void printQrToImage(const uint8_t qrcode[], const char *filename) {
+	printf("test\n");
     int size = qrcodegen_getSize(qrcode);  // Get the size of the QR code
     int border = 4;  // Border size in pixels
     int imageSize = (size + 2 * border) * 10;  // Size of the image (QR code + border) * scale factor
