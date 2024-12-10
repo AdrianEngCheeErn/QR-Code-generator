@@ -346,10 +346,8 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
     if (result == 0) {
         fprintf(stderr, "Failed to write PNG file: %s\n", filename);
         free(image);
-		printf("test\n");
         exit(EXIT_FAILURE);
     }
-	printf("test2\n");
 
     free(image);
 }
@@ -386,6 +384,6 @@ static void doBasicDemo(void) {
 	bool ok = qrcodegen_encodeText(text, tempBuffer, qrcode, errCorLvl,
 		qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
 	if (ok)
-		printQrToImage(qrcode, "qrcode.png");
-		printQr(qrcode);
+	printQrToImage(qrcode, "C:/Users/Adrian/Documents/GitHub/QR-Code-generator/c/qrcode.png");
+	printQr(qrcode);
 }
