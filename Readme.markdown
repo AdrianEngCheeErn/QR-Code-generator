@@ -1,7 +1,7 @@
 QR Code generator library
 =========================
 
-Utilised nayuki's open source qr code generator to generatea DuitNowQR for card terminal.
+Utilised nayuki's open source qr code generator to generate DuitNowQR for card terminal.
 
 License
 -------
