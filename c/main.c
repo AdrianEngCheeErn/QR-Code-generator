@@ -48,13 +48,13 @@ void printQrToImage(const uint8_t qrcode[], const char *filename) {
                     int pixelY = pixelStartY + dy;
 
                     if (isRed) {
-                        image[(pixelY * imageSize + pixelX) * 3 + 0] = 230;  // Red channel (red)
-                        image[(pixelY * imageSize + pixelX) * 3 + 1] = 53;    // Green channel (red)
-                        image[(pixelY * imageSize + pixelX) * 3 + 2] = 107;    // Blue channel (red)
+                        image[(pixelY * imageSize + pixelX) * 3 + 0] = 230;  
+                        image[(pixelY * imageSize + pixelX) * 3 + 1] = 53;    
+                        image[(pixelY * imageSize + pixelX) * 3 + 2] = 107;   
                     } else {
-                        image[(pixelY * imageSize + pixelX) * 3 + 0] = 255;  // Red channel (white)
-                        image[(pixelY * imageSize + pixelX) * 3 + 1] = 255;  // Green channel (white)
-                        image[(pixelY * imageSize + pixelX) * 3 + 2] = 255;  // Blue channel (white)
+                        image[(pixelY * imageSize + pixelX) * 3 + 0] = 255;  
+                        image[(pixelY * imageSize + pixelX) * 3 + 1] = 255; 
+                        image[(pixelY * imageSize + pixelX) * 3 + 2] = 255;  
                     }
                 }
             }
